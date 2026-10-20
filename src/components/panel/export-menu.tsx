@@ -166,13 +166,13 @@ export function ExportMenu({ trigger = true, align = "end" }: ExportMenuProps) {
             {item(
               <DataObject />,
               "JSON layout",
-              "Import as a wallpaper in DankMaterialShell",
+              "Import as a wallpaper in Dux Shell",
               exportJson,
             )}
             {item(
               <Wallpaper />,
               "Install in DMS",
-              "Opens DankMaterialShell on this machine",
+              "Opens Dux Shell on this machine",
               installInDms,
             )}
           </div>,

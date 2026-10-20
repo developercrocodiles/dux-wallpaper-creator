@@ -1,8 +1,8 @@
 # Wallpaper Generator
 
-Material 3 wallpaper generator compatible with [DMS](https://danklinux.com). Compose shapes, patterns and palettes, then export a PNG or a JSON layout that DMS renders as a live wallpaper.
+Material 3 wallpaper generator compatible with [DMS](https://duxlabs.dev). Compose shapes, patterns and palettes, then export a PNG or a JSON layout that DMS renders as a live wallpaper.
 
-Live at [wallpaper.danklinux.com](https://wallpaper.danklinux.com).
+Live at [wallpaper.duxlabs.dev](https://wallpaper.duxlabs.dev).
 
 ## Stack
 

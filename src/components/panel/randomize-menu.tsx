@@ -636,11 +636,13 @@ function OptionSwitch({
         aria-labelledby={`${id}-label`}
         aria-checked={checked}
         onClick={() => onChange(!checked)}
-        className={`relative inline-flex h-6 w-11 shrink-0 items-center rounded-full border-0 p-0.5 focus-ring ${checked ? "bg-primary" : "bg-secondary-container"}`}
+        className={`relative inline-flex h-8 w-[52px] shrink-0 items-center rounded-full border p-[3px] focus-ring transition-[background-color,border-color] duration-300 ease-effect ${checked ? "justify-end border-primary bg-primary" : "justify-start border-outline-variant bg-surface-container-high"}`}
       >
         <span
-          className={`size-5 rounded-full transition-transform ${checked ? "translate-x-5 bg-on-primary" : "translate-x-0 bg-on-secondary-container"}`}
-        />
+          className={`inline-flex shrink-0 items-center justify-center rounded-full transition-[width,height,background-color] duration-300 ease-spring ${checked ? "size-6 bg-on-primary text-primary" : "size-4 bg-on-surface-variant text-transparent"}`}
+        >
+          {checked && <Check aria-hidden="true" className="size-4" />}
+        </span>
       </button>
     </div>
   );

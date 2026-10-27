@@ -372,7 +372,11 @@ const randomizeLayers = (
             : layer.x,
           y: options.positionY
             ? Math.round(
-                randomAxis(canvas.height, layer.size, options.canvasSpill ? options.bleed / 100 : 0),
+                randomAxis(
+                  canvas.height,
+                  layer.size,
+                  options.canvasSpill ? options.bleed / 100 : 0,
+                ),
               )
             : layer.y,
         };

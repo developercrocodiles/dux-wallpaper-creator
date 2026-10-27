@@ -709,7 +709,8 @@ function RangeFields({
 }) {
   const formatted = (value: number) => {
     const displayedValue = +(value * displayFactor).toFixed(2);
-    const suffix = display.trim() === "step" ? (displayedValue === 1 ? " step" : " steps") : display;
+    const suffix =
+      display.trim() === "step" ? (displayedValue === 1 ? " step" : " steps") : display;
     return `${displayedValue}${suffix}`;
   };
   return (

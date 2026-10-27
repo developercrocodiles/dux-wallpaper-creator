@@ -592,7 +592,7 @@ export function RandomizeSettings() {
           </Button>
           <Button
             aria-label="Disable all randomization settings"
-            title="Turn off every randomization switch"
+            title="Turn off every switch"
             onClick={() => setAllSwitches(false)}
             className="w-full"
           >

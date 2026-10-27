@@ -25,7 +25,6 @@ import {
   randomBlob,
   randomShapeIndex,
   shapeIndex,
-  SHAPES,
   type SmoothnessIndex,
 } from "@/lib/shapes";
 import { loadSaved, persist } from "@/lib/storage";
@@ -166,8 +165,11 @@ const BLEED = 0.35;
 
 /** Where a `size`-wide box lands at random along one axis of the canvas.
  * The axis is extended by `BLEED` to allow shapes hanging off the canvas. */
-const randomAxis = (extent: number, size: number, bleed = BLEED) =>
-  extent > size ? rnd(-bleed * size, extent - size + bleed * size) : (extent - size) / 2;
+const randomAxis = (extent: number, size: number, bleed = BLEED) => {
+  const min = -bleed * size;
+  const max = extent - size + bleed * size;
+  return max >= min ? rnd(min, max) : (extent - size) / 2;
+};
 
 const randomPlacement = (canvas: Size, spec: ShapeSpec): Layer => {
   const size = randomSize(canvas);
@@ -184,28 +186,20 @@ const randomPlacement = (canvas: Size, spec: ShapeSpec): Layer => {
   };
 };
 
-const randomLayer = (canvas: Size, sizeMin: number, sizeMax: number): Layer => {
-  const size = Math.round(
-    rnd(
-      (sizeMin / 100) * Math.min(canvas.width, canvas.height),
-      (sizeMax / 100) * Math.min(canvas.width, canvas.height),
-    ),
-  );
-  const fill = randomFill();
-  const spec: ShapeSpec =
-    Math.random() < 0.25
-      ? { type: "blob", ...randomBlob() }
-      : { type: "shape", shape: Math.floor(Math.random() * SHAPES.length) };
+const randomizeLayerBase = (canvas: Size, template?: Layer): Layer => {
+  if (template) return { ...template, id: newLayerId() };
+
+  const size = Math.round(Math.min(canvas.width, canvas.height) * 0.4);
   return {
     id: newLayerId(),
-    ...spec,
+    type: "shape",
+    shape: shapeIndex("circle", 0),
     size,
     x: Math.round(canvas.width / 2 - size / 2),
     y: Math.round(canvas.height / 2 - size / 2),
-    rot: Math.round(rnd(0, 360)),
-    fill,
-    overlap: randomOverlap(fill),
-    ...(Math.random() < 0.35 ? { opacity: +rnd(0.55, 1).toFixed(2) } : {}),
+    rot: 0,
+    fill: PALETTE[0],
+    overlap: OVERLAP_OPTIONS[0],
   };
 };
 
@@ -300,23 +294,28 @@ const randomizeLayers = (
   if (options.shapeCount) {
     const targetCount = Math.round(rnd(options.countMin, options.countMax));
     startingLayers = layers.slice(0, targetCount);
-    while (startingLayers.length < targetCount)
-      startingLayers = [...startingLayers, randomLayer(canvas, options.sizeMin, options.sizeMax)];
+    while (startingLayers.length < targetCount) {
+      const template = layers.length ? layers[startingLayers.length % layers.length] : undefined;
+      startingLayers = [...startingLayers, randomizeLayerBase(canvas, template)];
+    }
   }
 
   const placed: Layer[] = [];
   for (const original of startingLayers) {
     let layer = original;
+    const previousShape = isBlob(layer) ? undefined : (layer.shape ?? 0);
 
     if (options.shapeType) {
       if (Math.random() < 0.3) {
-        layer = { ...layer, type: "blob", ...randomBlob() };
-        delete layer.shape;
+        if (!isBlob(layer)) {
+          layer = { ...layer, type: "blob", ...randomBlob() };
+          delete layer.shape;
+        }
       } else {
         layer = {
           ...layer,
           type: "shape",
-          shape: Math.floor(Math.random() * SHAPES.length),
+          shape: previousShape ?? shapeIndex("circle", 0),
         };
         delete layer.path;
         delete layer.points;
@@ -325,7 +324,7 @@ const randomizeLayers = (
     }
 
     if (options.shapeIndex && !isBlob(layer))
-      layer = { ...layer, shape: randomShapeIndex(layer.shape ?? 0) };
+      layer = { ...layer, shape: randomShapeIndex(previousShape) };
 
     if (isBlob(layer) && (options.blobContour || options.blobEdges || options.blobSmoothness)) {
       const edges = options.blobEdges

@@ -278,7 +278,9 @@ const randomizeLayers = (
           ? Math.max(0, options.gap - gapFor(candidate, other))
           : 0;
       const overlapPenalty = options.allowOverlap
-        ? Math.max(0, options.overlapMin - overlap) + Math.max(0, overlap - options.overlapMax)
+        ? overlap > 0
+          ? Math.max(0, options.overlapMin - overlap) + Math.max(0, overlap - options.overlapMax)
+          : 0
         : overlap;
       return total + gapPenalty + overlapPenalty;
     }, 0);
@@ -365,12 +367,12 @@ const randomizeLayers = (
           ...layer,
           x: options.positionX
             ? Math.round(
-                randomAxis(canvas.width, layer.size, options.canvasSpill ? options.bleed : 0),
+                randomAxis(canvas.width, layer.size, options.canvasSpill ? options.bleed / 100 : 0),
               )
             : layer.x,
           y: options.positionY
             ? Math.round(
-                randomAxis(canvas.height, layer.size, options.canvasSpill ? options.bleed : 0),
+                randomAxis(canvas.height, layer.size, options.canvasSpill ? options.bleed / 100 : 0),
               )
             : layer.y,
         };

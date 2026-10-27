@@ -153,10 +153,10 @@ export function RandomizeSettings() {
       patternOpacity: value,
       patternScale: value,
       layerOrder: value,
-      minimumGap: value,
+      minimumGap: false,
       allowOverlap: value,
-      limitOverlapCount: value,
-      spread: value,
+      limitOverlapCount: false,
+      spread: false,
       canvasSpill: value,
     }));
 
@@ -417,7 +417,7 @@ export function RandomizeSettings() {
                   min={0}
                   max={SMOOTHNESS.length - 1}
                   step={1}
-                  display="step"
+                  display=" step"
                   setMin={(value) => setOption("blobSmoothnessMin", value)}
                   setMax={(value) => setOption("blobSmoothnessMax", value)}
                 />
@@ -702,7 +702,11 @@ function RangeFields({
   setMin: (value: number) => void;
   setMax: (value: number) => void;
 }) {
-  const formatted = (value: number) => `${+(value * displayFactor).toFixed(2)}${display}`;
+  const formatted = (value: number) => {
+    const displayedValue = +(value * displayFactor).toFixed(2);
+    const suffix = display.trim() === "step" ? (displayedValue === 1 ? " step" : " steps") : display;
+    return `${displayedValue}${suffix}`;
+  };
   return (
     <>
       <SliderField

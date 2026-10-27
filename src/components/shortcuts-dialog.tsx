@@ -91,9 +91,9 @@ const groups = ({ move, rotate }: Labels): { title: string; rows: Row[] }[] => [
       { label: "Export menu", keys: keyParts("Mod+S") },
       {
         label: "Align all shapes, then confirm alignment",
-        keys: keyParts("Mod+Shift+L"),
+        keys: keyParts("Shift+L"),
       },
-      { label: "Open randomization options", keys: keyParts("Mod+Shift+R") },
+      { label: "Open randomization options", keys: keyParts("Shift+R") },
       { label: "Cycle the panel", hint: "full → mini → hidden", keys: ["P"] },
       { label: "Clear everything", hint: "press again to confirm", keys: ["X"] },
       { label: "Show this cheat sheet", hint: "or F1", keys: ["?"] },

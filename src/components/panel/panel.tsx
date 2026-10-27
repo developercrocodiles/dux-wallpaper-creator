@@ -129,8 +129,8 @@ export function Panel({ hueTrack, primaryHex }: PanelProps) {
 function AlignButton({ mini }: { mini: boolean }) {
   return (
     <IconButton
-      label={`Align shapes (${keyLabel("Mod+Shift+L")})`}
-      aria-keyshortcuts={ariaKeyshortcuts("Mod+Shift+L")}
+      label={`Align shapes (${keyLabel("Shift+L")})`}
+      aria-keyshortcuts={ariaKeyshortcuts("Shift+L")}
       variant="tonal"
       className={mini ? "size-12 rounded-[14px]" : "size-12 rounded-3xl"}
       onClick={() => {

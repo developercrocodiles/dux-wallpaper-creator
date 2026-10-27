@@ -93,8 +93,8 @@ export function RandomizeMenu({ mini = false }: { mini?: boolean } = {}) {
   return (
     <IconButton
       ref={button}
-      label={`Randomize (${keyLabel("Mod+Shift+R")})`}
-      aria-keyshortcuts={ariaKeyshortcuts("Mod+Shift+R")}
+      label={`Randomize (${keyLabel("Shift+R")})`}
+      aria-keyshortcuts={ariaKeyshortcuts("Shift+R")}
       aria-controls="panel-randomize"
       aria-expanded={open}
       variant="tonal"

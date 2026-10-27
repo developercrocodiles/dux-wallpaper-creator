@@ -204,7 +204,7 @@ export const useShortcuts = () => {
         ignoreInputs: true,
       }),
       bind(
-        "Mod+Shift+L",
+        "Shift+L",
         () => {
           if (uiStore.state.aligning) {
             wallpaper.confirmAlignment();
@@ -217,7 +217,7 @@ export const useShortcuts = () => {
         { enabled: !overlay, ignoreInputs: true },
       ),
       bind(
-        "Mod+Shift+R",
+        "Shift+R",
         () => {
           if (uiStore.state.aligning) {
             wallpaper.cancelAlignment();

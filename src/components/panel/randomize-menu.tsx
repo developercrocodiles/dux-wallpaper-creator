@@ -19,10 +19,11 @@ import {
   Casino,
   Check,
   Close,
+  ExpandCircleDown,
+  ExpandCircleRight,
   Layers,
   OpenInFull,
   Palette,
-  ReadMore,
   RotateRight,
   Search,
   Shuffle,
@@ -670,7 +671,11 @@ function OptionGroup({
       <summary className="flex cursor-pointer list-none items-center gap-2 py-2 font-semibold focus-ring [&::-webkit-details-marker]:hidden">
         <span className="text-on-surface-variant [&>svg]:size-5">{icon}</span>
         <span className="flex-1">{title}</span>
-        <ReadMore className="size-5 text-on-surface-variant transition-transform group-open:rotate-90" />
+        {expanded ? (
+          <ExpandCircleDown className="size-5 text-on-surface-variant" />
+        ) : (
+          <ExpandCircleRight className="size-5 text-on-surface-variant" />
+        )}
       </summary>
       <div className="flex flex-col gap-1 pb-2 pl-1">{children}</div>
     </details>

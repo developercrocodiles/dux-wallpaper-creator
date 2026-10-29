@@ -3,7 +3,7 @@ name: Deploy to GitHub Pages
 on:
   push:
     # Run workflow on pushing or merging a pull request to master branch
-    branches: [ "master" ] 
+    branches: [ "personal" ] 
 
 jobs:
   deploy:

@@ -11,7 +11,7 @@ import { layerPath, layerTransform } from "@/lib/layer";
 import { patternUrl } from "@/lib/patterns";
 import { normDeg } from "@/lib/utils";
 import { selectActive, useWallpaper, wallpaper, wallpaperStore } from "@/store/wallpaper";
-import { ui, useUi } from "@/store/ui";
+import { ui } from "@/store/ui";
 import { LayerShape } from "./layer-shape";
 
 interface StageProps {
@@ -31,7 +31,7 @@ export function Stage({ scale }: StageProps) {
     patternScale: state.prefs.patternScale,
   }));
   const active = useWallpaper(selectActive);
-  const aligning = useUi((state) => state.aligning);
+  const snapHintShown = useRef(false);
   const [snapGuides, setSnapGuides] = useState({
     vertical: [] as number[],
     horizontal: [] as number[],
@@ -90,9 +90,20 @@ export function Stage({ scale }: StageProps) {
       const deltaY = pointerEvent.clientY - origin.y;
       if (!moved && Math.hypot(deltaX, deltaY) < DRAG_THRESHOLD) return;
       moved = true;
+      if (!snapHintShown.current) {
+        snapHintShown.current = true;
+        try {
+          if (localStorage.getItem("dux-snap-hint-shown") !== "true") {
+            localStorage.setItem("dux-snap-hint-shown", "true");
+            ui.showToast("Hold Ctrl / Cmd while dragging to snap");
+          }
+        } catch {
+          ui.showToast("Hold Ctrl / Cmd while dragging to snap");
+        }
+      }
       const x = origin.lx + deltaX / scaleRef.current;
       const y = origin.ly + deltaY / scaleRef.current;
-      if (aligning) {
+      if (pointerEvent.ctrlKey || pointerEvent.metaKey) {
         setSnapGuides(wallpaper.snapActiveTo(x, y, true) ?? { vertical: [], horizontal: [] });
       } else {
         setSnapGuides({ vertical: [], horizontal: [] });
@@ -104,7 +115,7 @@ export function Stage({ scale }: StageProps) {
       window.removeEventListener("pointerup", up);
       window.removeEventListener("pointercancel", up);
       setSnapGuides({ vertical: [], horizontal: [] });
-      if (moved) wallpaper.patchActive({}, aligning);
+      if (moved) wallpaper.patchActive({});
     };
     window.addEventListener("pointermove", move);
     window.addEventListener("pointerup", up);
@@ -147,7 +158,7 @@ export function Stage({ scale }: StageProps) {
         {layers.map((layer, index) => (
           <LayerShape key={layer.id} layer={layer} index={index} below={layers.slice(0, index)} />
         ))}
-        {aligning &&
+        {snapGuides.vertical.length > 0 &&
           snapGuides.vertical.map((x) => (
             <line
               key={`snap-x-${x}`}
@@ -162,7 +173,7 @@ export function Stage({ scale }: StageProps) {
               className="pointer-events-none"
             />
           ))}
-        {aligning &&
+        {snapGuides.horizontal.length > 0 &&
           snapGuides.horizontal.map((y) => (
             <line
               key={`snap-y-${y}`}

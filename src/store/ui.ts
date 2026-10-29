@@ -24,7 +24,6 @@ export interface UiState {
   shortcutsOpen: boolean;
   exportMenuOpen: boolean;
   randomizeOpen: boolean;
-  aligning: boolean;
   toast: Toast | null;
   canvasFocused: boolean;
   bgMode: boolean;
@@ -44,7 +43,6 @@ export const uiStore = createStore<UiState, ReturnType<typeof uiActions>>(
     shortcutsOpen: false,
     exportMenuOpen: false,
     randomizeOpen: false,
-    aligning: false,
     toast: null,
     canvasFocused: false,
     bgMode: false,
@@ -88,7 +86,6 @@ function uiActions({
         randomizeOpen,
         ...(randomizeOpen ? { panel: "full", picker: null } : {}),
       }),
-    setAligning: (aligning: boolean) => patch({ aligning }),
 
     setCanvasFocused: (canvasFocused: boolean) => patch({ canvasFocused }),
     toggleBgMode: (on: boolean) => {

@@ -1,18 +1,16 @@
-import { IconButton } from "@/components/ui/icon-button";
 import { Tabs, TabsProps } from "@/components/ui/tabs";
 import { focusCanvas } from "@/a11y/focus-zones";
 import { isLastFocusable } from "@/lib/focus-dom";
-import { ariaKeyshortcuts, keyLabel } from "@/lib/shortcut-keys";
+import { ariaKeyshortcuts } from "@/lib/shortcut-keys";
 import { cn } from "@/lib/utils";
 import { ui, useUi, type Tab } from "@/store/ui";
 import { GlobalTab } from "./global-tab";
 import { ShapePicker } from "./shape-picker";
 import { ShapeTab } from "./shape-tab";
 import { Toolbar } from "./toolbar";
-import { Add, AlignHorizontalCenter, Check, Close, Shapes, Tune } from "material-symbols/rounded";
+import { Add, Shapes, Tune } from "material-symbols/rounded";
 import { Shapes as ShapesFilled } from "material-symbols/rounded/filled";
 import { RandomizeMenu, RandomizeSettings } from "./randomize-menu";
-import { wallpaper } from "@/store/wallpaper";
 
 const tabs = [
   {
@@ -33,11 +31,10 @@ interface PanelProps {
 }
 
 export function Panel({ hueTrack, primaryHex }: PanelProps) {
-  const { panel, tab, picking, aligning, randomizeOpen } = useUi((state) => ({
+  const { panel, tab, picking, randomizeOpen } = useUi((state) => ({
     panel: state.panel,
     tab: state.tab,
     picking: state.picker !== null,
-    aligning: state.aligning,
     randomizeOpen: state.randomizeOpen,
   }));
   if (panel === "hidden") return null;
@@ -88,15 +85,8 @@ export function Panel({ hueTrack, primaryHex }: PanelProps) {
               )}
             </div>
             <div className="flex items-center gap-2 px-2 py-3">
-              {aligning ? (
-                <AlignmentActions />
-              ) : (
-                <>
-                  <RandomizeMenu mini />
-                  <AddShapeButton mini={false} />
-                  <AlignButton mini={false} />
-                </>
-              )}
+              <RandomizeMenu mini />
+              <AddShapeButton mini={false} />
             </div>
           </div>
           <div
@@ -110,63 +100,12 @@ export function Panel({ hueTrack, primaryHex }: PanelProps) {
         </div>
         {mini && (
           <div className="align-center flex flex-col items-center gap-2 pb-3">
-            {aligning ? (
-              <AlignmentActions />
-            ) : (
-              <>
-                <RandomizeMenu mini />
-                <AddShapeButton mini />
-                <AlignButton mini />
-              </>
-            )}
+            <RandomizeMenu mini />
+            <AddShapeButton mini />
           </div>
         )}
       </div>
     </aside>
-  );
-}
-
-function AlignButton({ mini }: { mini: boolean }) {
-  return (
-    <IconButton
-      label={`Align shapes (${keyLabel("Shift+L")})`}
-      aria-keyshortcuts={ariaKeyshortcuts("Shift+L")}
-      variant="tonal"
-      className={mini ? "size-12 rounded-[14px]" : "size-12 rounded-3xl"}
-      onClick={() => {
-        wallpaper.beginAlignment();
-        ui.setAligning(true);
-      }}
-    >
-      <AlignHorizontalCenter />
-    </IconButton>
-  );
-}
-
-function AlignmentActions() {
-  return (
-    <div className="flex flex-1 items-center justify-center gap-3">
-      <IconButton
-        label="Keep this alignment"
-        variant="filled"
-        onClick={() => {
-          wallpaper.confirmAlignment();
-          ui.setAligning(false);
-        }}
-      >
-        <Check />
-      </IconButton>
-      <IconButton
-        label="Cancel alignment changes"
-        variant="tonal"
-        onClick={() => {
-          wallpaper.cancelAlignment();
-          ui.setAligning(false);
-        }}
-      >
-        <Close />
-      </IconButton>
-    </div>
   );
 }
 

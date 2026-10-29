@@ -19,7 +19,7 @@ import {
   wallpaper,
   wallpaperStore,
 } from "@/store/wallpaper";
-import { ui, uiStore, useUi } from "@/store/ui";
+import { ui, useUi } from "@/store/ui";
 
 const hasActive = () => wallpaperStore.state.activeId !== null;
 
@@ -203,30 +203,6 @@ export const useShortcuts = () => {
         enabled: !overlay,
         ignoreInputs: true,
       }),
-      bind(
-        "Shift+L",
-        () => {
-          if (uiStore.state.aligning) {
-            wallpaper.confirmAlignment();
-            ui.setAligning(false);
-          } else {
-            wallpaper.beginAlignment();
-            ui.setAligning(true);
-          }
-        },
-        { enabled: !overlay, ignoreInputs: true },
-      ),
-      bind(
-        "Shift+R",
-        () => {
-          if (uiStore.state.aligning) {
-            wallpaper.cancelAlignment();
-            ui.setAligning(false);
-          }
-          ui.setRandomizeOpen(true);
-        },
-        { enabled: !overlay, ignoreInputs: true },
-      ),
       bind("?", () => ui.setShortcutsOpen(true), { enabled: !dialogOpen }),
       bind("F1", () => ui.setShortcutsOpen(true), { enabled: !dialogOpen }),
       bind("F6", () => switchZone("start", canvasFocused), {
